@@ -21,7 +21,7 @@ _dot_product PROC
 		push edx
 		mov edi, [edx]
 		mov eax, esi
-		mul edi
+		imul edi
 		pop edx
 		add [esp], eax
 		add ebx, 4
