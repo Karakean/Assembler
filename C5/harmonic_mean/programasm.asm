@@ -10,7 +10,6 @@ _harmonic_mean PROC
 	mov ecx, [esp+8]
 	mov nn, ecx
 	mov ebx, [esp+4] ;array address
-	;fld one ;to reciprocal
 	finit
 	fldz ;beginning sum
 
