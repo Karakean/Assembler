@@ -1,5 +1,8 @@
+#define MAX_ARR_SIZE 100
 #include <stdio.h>
 #include<xmmintrin.h>
+float harmonic_mean(float* arr, unsigned int n);
+float series_sum(float x, int n);
 void sum(char* arrA, char* arrB, char* arrC);
 void int2float(int* arr1, float* arr2);
 void addsub(float* arr);
@@ -11,6 +14,21 @@ float cone_volume(unsigned int big_r, unsigned int small_r, float h);
 void quadratic_equation(float a, float b, float c, float* x1, float* x2);
 int main()
 {
+	/*float numbers[MAX_ARR_SIZE];
+	int n;
+	scanf_s(" %d", &n);
+	for (int i = 0; i < n; i++) {
+		scanf_s("%f", i[numbers]);
+	}
+	float result = harmonic_mean(numbers, n);
+	printf("%f", result); */
+
+	/*float x;
+	int n;
+	scanf_s("%f\n%d", &x, &n);
+	float result = series_sum(x, n);
+	printf("%f", result);*/
+
 	/*char arr_A[16] = { -128, -127, -126, -125, -124, -123, -122,
 -121, 120, 121, 122, 123, 124, 125, 126, 127 };
 	char arr_B[16] = { -3, -3, -3, -3, -3, -3, -3, -3,

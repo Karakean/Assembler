@@ -17,6 +17,55 @@ const_g dd 9.81
 x1 dd ?
 x2 dd ?
 .code
+_harmonic_mean PROC
+	mov ecx, [esp+8]
+	mov nn, ecx
+	mov ebx, [esp+4] ;array address
+	finit
+	fldz ;beginning sum
+
+	lp: ;loop
+		mov eax, [ebx]
+		mov value, eax
+		fld one
+		fld dword ptr value
+		fdivp st(1), st(0)
+		faddp st(1), st(0)
+		add ebx, 4
+	loop lp
+
+	fild nn
+	fdiv st(0),st(1)
+	fxch
+	fstp st(0)
+
+	ret
+_harmonic_mean ENDP
+
+_series_sum PROC ; 1+(x/1)+(x^2/(1*2))+(x^3/(1*2*3))+...
+	mov eax, [esp+4]
+	mov x_val, eax
+	mov ecx, [esp+8]
+	
+	finit
+	fld one ;sum
+	dec ecx
+	fldz ;loop counter, 0 at beginning
+	fld one ;just one
+	lp: ;loop
+		fld x_val ;
+		fmulp st(1),st(0) ;x^(i), nominator
+		fld one
+		faddp st(2), st(0) ;1*2*..*n, denominator
+		fdiv st(0), st(1) ;nominator/denominator
+		fadd st(2), st(0) ;sum
+	loop lp
+
+	fstp st(0)
+	fstp st(0)
+	ret
+_series_sum ENDP
+
 _sum PROC
 	 push ebp
 	 mov ebp, esp ;prolog
