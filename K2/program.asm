@@ -3,10 +3,11 @@
 extern _malloc : PROC
 public _subtract, _array_copy, _error, _find_min_elem
 public _encrypt, _square, _iteration, _float_to_double
-public _circle_field, _avg_wd
+public _circle_field, _avg_wd, _sort, _ASCII_to_UTF16
 .data 
 dtr dq ?
 .code
+
 _subtract PROC
 	push ebp
 	mov ebp, esp ;prolog
@@ -29,6 +30,7 @@ _subtract PROC
 	pop ebp
 	ret
 _subtract ENDP
+
 _array_copy PROC
 	push ebp
 	mov ebp, esp
@@ -76,6 +78,7 @@ _array_copy PROC
 	pop ebp
 	ret
 _array_copy ENDP
+
 _error PROC
 	push ebp
 	mov ebp, esp
@@ -125,6 +128,7 @@ _error PROC
 	pop ebp
 	ret
 _error ENDP
+
 _find_min_elem PROC
 	push ebp
 	mov ebp, esp
@@ -158,6 +162,7 @@ _find_min_elem PROC
 	pop ebp
 	ret
 _find_min_elem ENDP
+
 _encrypt PROC
 	push ebp
 	mov ebp, esp
@@ -196,6 +201,7 @@ _encrypt PROC
 	pop ebp
 	ret
 _encrypt ENDP
+
 _square PROC
 push ebp
 mov ebp, esp
@@ -226,6 +232,7 @@ pop ebx
 pop ebp
 ret
 _square ENDP
+
 _iteration PROC
 	push ebp
 	mov ebp, esp
@@ -245,6 +252,7 @@ _iteration PROC
 	pop ebp
 	ret
 _iteration ENDP
+
 _float_to_double PROC
 	push ebp
 	mov ebp, esp
@@ -268,7 +276,6 @@ _float_to_double PROC
 	and eax, 007FFFFFh
 	lp:
 		shr eax, 1
-		setc dl
 		rcr edx, 1
 	loop lp
 	or eax, ebx
@@ -281,6 +288,7 @@ _float_to_double PROC
 	pop ebp
 	ret
 _float_to_double ENDP
+
 _circle_field PROC
 	push ebp
 	mov ebp, esp
@@ -296,6 +304,7 @@ _circle_field PROC
 	pop ebp
 	ret
 _circle_field ENDP
+
 _avg_wd PROC
 push ebp
 mov ebp, esp
@@ -325,4 +334,100 @@ pop esi
 pop ebp
 ret
 _avg_wd ENDP
+
+_sort PROC
+push ebp
+mov ebp, esp
+sub esp, 8
+push esi
+push edi
+push ebx
+mov ebx, [ebp+8]
+mov eax, [ebp+12]
+dec eax
+mov dword ptr [ebp-4], eax
+
+mov ecx, 0
+lp:
+	mov esi, 0
+	mov eax, [ebp-4]
+	sub eax, ecx
+	mov [ebp-8], eax
+	lp2:
+		mov eax, [ebx+8*esi+4]
+		mov edx, [ebx+8*esi+12]
+		cmp eax, edx
+		jb continue
+		ja swap
+
+		mov eax, [ebx+8*esi]
+		mov edx, [ebx+8*esi+8]
+		cmp eax, edx
+		jna continue
+
+		mov eax, [ebx+8*esi+4]
+		mov edx, [ebx+8*esi+12]
+
+		swap:
+		mov [ebx+8*esi+4], edx
+		mov edx, [ebx+8*esi+8]
+		push dword ptr [ebx+8*esi]
+		mov [ebx+8*esi], edx
+		mov [ebx+8*esi+12], eax
+		pop eax
+		mov [ebx+8*esi+8], eax
+
+		continue:
+		inc esi
+		cmp esi, [ebp-8]
+	jne lp2
+	inc ecx
+	cmp ecx, [ebp-4]
+jne lp
+
+mov edx, [ebx+8*ecx+4]
+mov eax, [ebx+8*ecx]
+
+pop ebx
+pop edi
+pop esi
+add esp, 8
+pop ebp
+ret
+_sort ENDP
+
+_ASCII_to_UTF16 PROC
+	push ebp
+	mov ebp, esp
+	push esi
+	push edi
+	push ebx
+
+	mov esi, [ebp+8]
+	mov eax, [ebp+12]
+	mov ecx, 2
+	mul ecx
+	push eax
+	call _malloc
+	add esp, 4
+	mov edi, eax
+	mov ecx, [ebp+12]
+
+	mov ebx, 0
+	lp:
+		mov al, [esi+ebx]
+		mov byte ptr [edi+2*ebx], al
+		mov byte ptr [edi+2*ebx+1], 0
+		inc ebx
+	loop lp
+
+	mov eax, edi
+
+	pop ebx
+	pop edi
+	pop esi
+	pop ebp
+	ret
+_ASCII_to_UTF16 ENDP
+
 END
