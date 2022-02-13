@@ -40,7 +40,8 @@ int main() {
 		printf("OK.\n");
 
 	char input[] = ";{\"tekst\":sdasd,\"szyfr\":0x34};{\"tekst\":ssss,\"szyfr\":0x47};{\"tekst\":foo,\"szyfr\":0xAB};";
-	unsigned int g = count_counterfeit(input, 'A');
+	//char input2[] = ";{\"tekst\":sdasd,\"szyfr\":0x2E};";
+	unsigned int g = count_counterfeit(input, 'a');
 	printf("%u", g);
 
 
