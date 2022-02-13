@@ -373,22 +373,39 @@ _count_counterfeit PROC
 	mov al, [ebx]
 	cmp al, ','
 	je continue
-	xor al, cl
+ 	xor al, cl
 	add dl, al
 	inc ebx
 	jmp lp1
 
+
 	continue:
-	add ebx, 11
-	mov al, [ebx]
-	shl al, 4
-	inc ebx
-	add al, [ebx]
-	cmp al, dl
-	setne dl
-	movzx edx, dl
-	add esi, edx
-	add ebx, 2
+		add ebx, 11
+		mov al, [ebx]
+		cmp al, '9'
+		ja letter
+			sub al, 30h
+			jmp continue2
+		letter:
+			sub al, 55
+		continue2:
+		shl al, 4
+		inc ebx
+		mov cl, [ebx]
+		cmp cl, '9'
+		ja letter2
+		sub cl, 30h
+		jmp continue3
+		letter2:
+		sub cl, 55
+		continue3:
+		add al, cl
+		cmp al, dl
+		setne dl
+		movzx edx, dl
+		add esi, edx
+		add ebx, 2
+		mov cl, [ebp+12]
 	jmp lp
 
 
