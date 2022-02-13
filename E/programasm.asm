@@ -378,7 +378,6 @@ _count_counterfeit PROC
 	inc ebx
 	jmp lp1
 
-
 	continue:
 		add ebx, 11
 		mov al, [ebx]
